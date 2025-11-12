@@ -90,7 +90,7 @@ export const leadsAndSpecialists: TeamMember[] = [
   {
     name: "Shubham Rahangdale",
     title: "Head of Sales And Marketing",
-    bio: "3+ years coordinating logistics, shipping documentation, and dispatch accuracy.",
+    bio: "4+ years coordinating logistics, shipping documentation, and dispatch accuracy.",
     focus: [
       "Pick, pack, seal, and labeling control",
       "Courier bookings and tracking updates",
@@ -102,13 +102,24 @@ export const leadsAndSpecialists: TeamMember[] = [
   {
     name: "Swapnil Mishra",
     title: "Business Development Manager - Aerospace",
-    bio: "4+ years supporting customer consultations, product selection, and order coordination.",
+    bio: "5+ years supporting customer consultations, product selection, and order coordination.",
     focus: [
-      "Requirement capture and quotes",
-      "Availability checks and follow-ups",
-      "Post-order customer support",
+      "Drives business growth through strategic engagement with aerospace OEMs and MROs",
+      "Identifies new opportunities and manages end-to-end customer acquisition",
+      "Leads proposal strategy, and pricing alignment",
     ],
     image: "/images/team/operations/operations1.png",
+  },
+  {
+    name: "Puneet Virdi",
+    title: "Business Development Manager - Aerospace",
+    bio: "Aerospace specialist focused on expanding market presence and building strategic customer relationships With 15+ years of experience in the industry.",
+    focus: [
+      "Customer relationship management",
+      "Aerospace market intelligence",
+      "Business development strategy execution",
+    ],
+    image: "/images/team/managers/manager6.jpeg",
   },
   {
     name: "Harshada Gavkar",
@@ -121,17 +132,7 @@ export const leadsAndSpecialists: TeamMember[] = [
     ],
     image: "/images/team/finance/finance.png",
   },
-  {
-    name: "Puneet Virdi",
-    title: "Business Development Manager - Aerospace",
-    bio: "Aerospace specialist focused on expanding market presence and building strategic customer relationships.",
-    focus: [
-      "Customer relationship management",
-      "Aerospace market intelligence",
-      "Business development strategy execution",
-    ],
-    image: "/images/team/managers/manager6.jpeg",
-  },
+  
   {
     name: "Gaurav Thakkar",
     title: "SCM",
