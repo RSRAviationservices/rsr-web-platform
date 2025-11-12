@@ -92,9 +92,9 @@ export const leadsAndSpecialists: TeamMember[] = [
     title: "Head of Sales And Marketing",
     bio: "4+ years coordinating logistics, shipping documentation, and dispatch accuracy.",
     focus: [
-      "Pick, pack, seal, and labeling control",
-      "Courier bookings and tracking updates",
-      "Proof of delivery and records retention",
+      "Responsible for lead generation, client communication, quotation preparation, and negotiation to achieve sales targets.",
+      "Coordinated with technical and procurement teams to ensure smooth order processing and customer satisfaction.",
+      "Contributed to expanding market presence and maintaining long-term partnerships with key aviation clients",
     ],
     image: "/images/team/sales/sales3.png",
   },
