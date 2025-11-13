@@ -10,7 +10,8 @@ const BrochureSection = () => (
       Get a comprehensive overview of our products and services.
     </p>
     <a
-      href="https://f003.backblazeb2.com/file/rsr-aviation-test/RSR+New+Brochure+Aug+25.pdf"
+      // UPDATED to use the CloudFront URL we set up
+      href="https://cdn.rsraviation.com/brochures/RSR+New+Brochure+Aug+25.pdf"
       download="RSR-Aviation-Brochure.pdf"
       target="_blank"
       rel="noopener noreferrer"
@@ -143,7 +144,7 @@ export default function Footer() {
               </div>
             </div>
             <a
-              href="#"
+              href="#" // You can update this to your Google Maps link
               className="inline-flex items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-zinc-300"
             >
               See on Maps <ArrowRight size={16} />
@@ -159,6 +160,32 @@ export default function Footer() {
         {/* --- Bottom Bar --- */}
         <div className="mt-16 border-t border-white/10 pt-8 sm:mt-20 lg:mt-24">
           <div className="flex flex-col-reverse items-start gap-8 lg:flex-row lg:justify-between">
+            {/* Left side container for copyright and legal links */}
+            <div className="flex flex-col items-start gap-4 lg:flex-row lg:items-center lg:gap-6">
+              <p className="text-xs leading-5 text-zinc-400">
+                &copy; {new Date().getFullYear()} RSR Aviation Services Private
+                Limited. All rights reserved.
+              </p>
+              
+              {/* --- ADDED LINKS START --- */}
+              <div className="flex gap-x-6">
+                <Link
+                  href="/privacy-policy"
+                  className="text-xs leading-5 text-zinc-400 hover:text-white hover:underline"
+                >
+                  Privacy Policy
+                </Link>
+                <Link
+                  href="/terms-of-service"
+                  className="text-xs leading-5 text-zinc-400 hover:text-white hover:underline"
+                >
+                  Terms of Service
+                </Link>
+              </div>
+              {/* --- ADDED LINKS END --- */}
+            </div>
+            
+            {/* Right side container for certifications */}
             <div className="flex flex-wrap items-center justify-start gap-x-6 gap-y-4">
               <p className="text-sm font-semibold text-white">
                 Certifications:
@@ -172,10 +199,6 @@ export default function Footer() {
                 </span>
               ))}
             </div>
-            <p className="text-xs leading-5 text-zinc-400">
-              &copy; {new Date().getFullYear()} RSR Aviation Services Private
-              Limited. All rights reserved.
-            </p>
           </div>
         </div>
       </div>
