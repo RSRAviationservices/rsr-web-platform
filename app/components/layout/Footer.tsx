@@ -11,7 +11,7 @@ const BrochureSection = () => (
     </p>
     <a
       // UPDATED to use the CloudFront URL we set up
-      href="public/RSR New Brochure Aug 25.pdf"
+      href="https://cdn.rsraviation.com/brochures/RSR+New+Brochure+Aug+25.pdf"
       download="RSR-Aviation-Brochure.pdf"
       target="_blank"
       rel="noopener noreferrer"
