@@ -49,13 +49,6 @@ const milestones = [
     isComplete: true,
   },
   {
-    label: "Feb 2024",
-    title: "TESA Distributorship",
-    description:
-      "Appointed as an official distributor for TESA's advanced adhesive tape solutions.",
-    isComplete: true,
-  },
-  {
     label: "Sept 2024",
     title: "Multiple Distributorships & Certifications",
     description:
@@ -63,18 +56,25 @@ const milestones = [
     isComplete: true,
   },
   {
+    label: "Feb 2025",
+    title: "TESA Distributorship",
+    description:
+      "Appointed as an official distributor for TESA's advanced adhesive tape solutions.",
+    isComplete: true,
+  },
+  {
     label: "Q2 2025",
     title: "Exclusive GRM Systems Distributor",
     description:
       "Appointed exclusive distributor for GRM Systems' advanced composite materials across India.",
-    isComplete: false,
+    isComplete: true,
   },
   {
     label: "Q3 2025",
     title: "Alpha Aircraft Systems Partnership",
     description:
       "Formed a strategic partnership to establish an APU MRO facility under the 'Make in India' initiative.",
-    isComplete: false,
+    isComplete: true,
   },
 ];
 
