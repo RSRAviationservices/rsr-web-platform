@@ -161,7 +161,7 @@ export function ApplicationForm({
     toast.promise(submitPromise, {
       loading: "Submitting your application...",
       success: (response) =>
-        response.message ||
+        response.meta?.message ||
         "Application submitted successfully! We'll review your application and get back to you soon.",
       error: (error) =>
         error.message || "Failed to submit application. Please try again.",
@@ -282,11 +282,10 @@ export function ApplicationForm({
               </div>
             ) : (
               <div
-                className={`mt-2 flex items-center justify-between rounded-lg border p-4 ${
-                  resumeUrl
+                className={`mt-2 flex items-center justify-between rounded-lg border p-4 ${resumeUrl
                     ? "border-green-200 bg-green-50"
                     : "border-zinc-200 bg-zinc-50"
-                }`}
+                  }`}
               >
                 <div className="flex items-center gap-3">
                   {resumeUrl ? (
@@ -296,16 +295,14 @@ export function ApplicationForm({
                   )}
                   <div>
                     <p
-                      className={`font-medium ${
-                        resumeUrl ? "text-green-900" : "text-zinc-900"
-                      }`}
+                      className={`font-medium ${resumeUrl ? "text-green-900" : "text-zinc-900"
+                        }`}
                     >
                       {resumeFile.name}
                     </p>
                     <p
-                      className={`text-sm ${
-                        resumeUrl ? "text-green-600" : "text-zinc-500"
-                      }`}
+                      className={`text-sm ${resumeUrl ? "text-green-600" : "text-zinc-500"
+                        }`}
                     >
                       {(resumeFile.size / 1024).toFixed(2)} KB
                       {resumeUrl && " • Uploaded"}
