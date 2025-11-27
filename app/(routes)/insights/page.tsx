@@ -1,56 +1,68 @@
 import React from "react";
 import { InsightsHeader } from "./components/InsightsHeader";
-import { FeaturedPostCard } from "./components/FeaturedPostCard";
-import { SidebarPostCard } from "./components/SidebarPostCard";
-import { LatestPostsGrid } from "./components/LatestPostsGrid";
+import { SingleHeroLayout } from "./components/layouts/SingleHeroLayout";
+import BentoGridLayout from "./components/layouts/BentoGridLayout";
+import { MagazineLayout } from "./components/layouts/MagazineLayout";
+import EmptyState from "./components/EmptyState";
 import { insightsService } from "@/app/api/insights/insightsService";
 import type { Metadata } from "next";
 
-// ISR: Revalidate every 60 seconds
-export const revalidate = 60;
+export const revalidate = 60; // Revalidate every 60 seconds (ISR)
 
 export const metadata: Metadata = {
   title: "Insights - RSR Aviation",
-  description:
-    "Stay updated with the latest insights, news, and articles from RSR Aviation on aviation industry trends, technology, and best practices.",
-  openGraph: {
-    title: "Insights - RSR Aviation",
-    description:
-      "Latest insights and articles from RSR Aviation on aviation industry trends.",
-    type: "website",
-  },
+  description: "Aviation industry trends, product updates, and RSR company news.",
 };
 
 export default async function InsightsPage() {
-  // Fetch insights server-side with ISR
-  const insightsData = await insightsService.getInsights({
-    limit: 20,
-    sortBy: "publishedAt",
-    sortOrder: "desc",
-  });
+  let insightsData;
+  let isError = false;
 
-  const featuredPost = insightsData.data[0];
-  const sidebarPosts = insightsData.data.slice(1, 5);
-  const latestPosts = insightsData.data.slice(1);
+  // 1. Fetch Data with Error Handling
+  try {
+    insightsData = await insightsService.getInsights({
+      limit: 12, // Fetch slightly more to populate the grid initially
+      sortBy: "publishedAt",
+      sortOrder: "desc",
+    });
+  } catch (error) {
+    console.error("Failed to fetch insights:", error);
+    isError = true;
+  }
 
+  const posts = insightsData?.data || [];
+  const count = posts.length;
+
+  // 2. Error State
+  if (isError) {
+    return (
+      <div className="bg-white min-h-screen">
+        <InsightsHeader />
+        <main className="container mx-auto max-w-7xl px-4">
+          <EmptyState error />
+        </main>
+      </div>
+    );
+  }
+
+  // 3. Render Logic based on Count
   return (
-    <div className="bg-white text-zinc-900">
+    <div className="bg-white min-h-screen text-zinc-900 pb-20">
       <InsightsHeader />
-      <section className="container mx-auto max-w-7xl px-4">
-        {featuredPost && (
-          <div className="grid grid-cols-1 gap-8 border-b border-zinc-200 pb-16 md:grid-cols-3 md:pb-24">
-            <div className="md:col-span-2">
-              <FeaturedPostCard post={featuredPost} />
-            </div>
-            <div className="space-y-6 md:col-span-1">
-              {sidebarPosts.map((post) => (
-                <SidebarPostCard key={post.slug} post={post} />
-              ))}
-            </div>
-          </div>
-        )}
-      </section>
-      <LatestPostsGrid initialPosts={latestPosts} />
+
+      <main className="container mx-auto max-w-7xl px-4">
+        {/* SCENARIO A: No Content (0) */}
+        {count === 0 && <EmptyState />}
+
+        {/* SCENARIO B: Focus Mode (1) */}
+        {count === 1 && <SingleHeroLayout post={posts[0]} />}
+
+        {/* SCENARIO C: Bento Grid (2-4) */}
+        {count > 1 && count < 5 && <BentoGridLayout posts={posts} />}
+
+        {/* SCENARIO D: Magazine Layout (5+) */}
+        {count >= 5 && <MagazineLayout posts={posts} />}
+      </main>
     </div>
   );
 }
