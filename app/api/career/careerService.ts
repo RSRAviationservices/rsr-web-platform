@@ -1,4 +1,4 @@
-import axiosClient from '../axiosClient';
+import axiosClient, { ApiResponse } from '../axiosClient';
 import type {
   Career,
   PaginatedCareers,
@@ -35,8 +35,8 @@ export const careerService = {
   async submitApplication(
     slug: string,
     data: SubmitApplicationData
-  ): Promise<{ data: any; message: string }> {
-    const response = await axiosClient.post<{ data: any; message: string }>(
+  ): Promise<ApiResponse<any>> {
+    const response = await axiosClient.post<ApiResponse<any>>(
       `${BASE_URL}/${slug}/apply`,
       data
     );
