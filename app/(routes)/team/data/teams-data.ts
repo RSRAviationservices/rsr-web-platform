@@ -30,6 +30,17 @@ export const directors: TeamMember[] = [
     ],
     image: "/images/team/directors/directors2.png",
   },
+  {
+    name: "Reena Daultani",
+    title: "Director",
+    bio: "Qualified Company  Secretary with 5+ years of experience in corporate governance and over 10 years of expertise in equilty research and financial advisor.",
+    focus: [
+      "Coporate Governance & Compliance",
+      "Equity Research & Financial Advisor",
+      "Coping with Complexities",
+    ],
+    image: "/images/team/directors/directors3.png",
+  },
 ];
 
 // Tier 2: VPs
@@ -43,7 +54,7 @@ export const vps: TeamMember[] = [
       "Government policy advocacy",
       "Brand positioning & stakeholder engagement",
     ],
-    image: "/images/team/managers/manager4.jpeg",
+    image: "/images/team/managers/manager7.jpeg",
   },
   {
     name: "Nimish Kadam",
