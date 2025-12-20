@@ -36,7 +36,7 @@ export default function LocationDetails() {
             </div>
             <div className="flex gap-x-4">
               <Phone className="h-5 w-5 flex-shrink-0 text-zinc-500" />
-              <span>For Sales Enquiry :+91 9595475981</span>
+              <span>For Sales Enquiry: +91 9595475981</span>
             </div>
             <div className="flex gap-x-4">
               <Mail className="h-5 w-5 flex-shrink-0 text-zinc-500" />
