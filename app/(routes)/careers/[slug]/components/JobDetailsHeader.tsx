@@ -75,7 +75,6 @@ export function JobDetailsHeader({ career }: JobDetailsHeaderProps) {
       {/* Salary Range (if available) */}
       {salaryRange && (
         <div className="mt-4 flex items-center gap-2 text-lg font-semibold text-zinc-900">
-          <DollarSign className="h-5 w-5" />
           {formatSalary()}
         </div>
       )}
