@@ -11,7 +11,7 @@ const BrochureSection = () => (
     </p>
     <a
       // UPDATED to use the CloudFront URL we set up
-      href="https://cdn.rsraviation.com/brochures/RSR+New+Brochure+Aug+25.pdf"
+      href="https://cdn.rsraviation.com/brochures/RSR+Brochure.pdf"
       download="RSR-Aviation-Brochure.pdf"
       target="_blank"
       rel="noopener noreferrer"
@@ -24,7 +24,7 @@ const BrochureSection = () => (
 );
 
 export default function Footer() {
-  const certifications = ["ISO 9001:2015", "AS9100D", "DGCA CAR 145"];
+  const certifications = ["ISO 14001:2015", "AS9100:2016", "AS 9120:2016"];
 
   const quickLinks = [
     { name: "Home", href: "/" },
@@ -121,8 +121,7 @@ export default function Footer() {
               <div className="flex gap-x-3">
                 <MapPin className="h-5 w-5 flex-shrink-0 text-zinc-400" />
                 <address className="not-italic">
-                  Unit B-68-71, Platinum Spring, Plot 6, Taloja, Panvel, Navi
-                  Mumbai, Maharashtra - 410208
+                  Unit B-67/68, Platinum Spring, Plot 6,G-20 To G-21,Taloja MIDC,Navde,panvel-410210,Maharashtra,India
                 </address>
               </div>
               <div className="flex gap-x-4">
