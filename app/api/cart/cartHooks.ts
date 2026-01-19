@@ -1,4 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 import { toast } from "sonner";
 import * as cartService from "./cartService";
 import { useCartStore } from "@/app/store/useCartStore";
@@ -41,6 +43,8 @@ export const useCart = () => {
  */
 export const useAddItem = () => {
   const queryClient = useQueryClient();
+  const router = useRouter();
+
   return useMutation({
     mutationFn: (payload: AddItemPayload) => cartService.addItem(payload),
     onSuccess: (data) => {
@@ -48,7 +52,11 @@ export const useAddItem = () => {
       queryClient.setQueryData(CART_QUERY_KEY, data.data);
     },
     onError: (error) => {
-      toast.error(getErrorMessage(error, "Failed to add item."));
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        router.push("/login?redirect=/cart"); // Optionally add redirect param if supported
+      } else {
+        toast.error(getErrorMessage(error, "Failed to add item."));
+      }
     },
   });
 };
@@ -58,6 +66,7 @@ export const useAddItem = () => {
  */
 export const useUpdateItemQuantity = () => {
   const queryClient = useQueryClient();
+  const router = useRouter();
   return useMutation({
     mutationFn: (payload: UpdateItemQuantityPayload) =>
       cartService.updateItemQuantity(payload),
@@ -65,8 +74,12 @@ export const useUpdateItemQuantity = () => {
       queryClient.setQueryData(CART_QUERY_KEY, data.data);
     },
     onError: (error) => {
-      toast.error(getErrorMessage(error, "Failed to update quantity."));
-      queryClient.invalidateQueries({ queryKey: CART_QUERY_KEY }); // Revert on error
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        router.push("/login?redirect=/cart");
+      } else {
+        toast.error(getErrorMessage(error, "Failed to update quantity."));
+        queryClient.invalidateQueries({ queryKey: CART_QUERY_KEY }); // Revert on error
+      }
     },
   });
 };
@@ -76,6 +89,7 @@ export const useUpdateItemQuantity = () => {
  */
 export const useRemoveItem = () => {
   const queryClient = useQueryClient();
+  const router = useRouter();
   return useMutation({
     mutationFn: (productId: string) => cartService.removeItem(productId),
     onSuccess: (data) => {
@@ -83,8 +97,12 @@ export const useRemoveItem = () => {
       queryClient.setQueryData(CART_QUERY_KEY, data.data);
     },
     onError: (error) => {
-      toast.error(getErrorMessage(error, "Failed to remove item."));
-      queryClient.invalidateQueries({ queryKey: CART_QUERY_KEY });
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        router.push("/login?redirect=/cart");
+      } else {
+        toast.error(getErrorMessage(error, "Failed to remove item."));
+        queryClient.invalidateQueries({ queryKey: CART_QUERY_KEY });
+      }
     },
   });
 };
@@ -94,6 +112,7 @@ export const useRemoveItem = () => {
  */
 export const useUpdateCartDetails = () => {
   const queryClient = useQueryClient();
+  const router = useRouter();
   return useMutation({
     mutationFn: (payload: UpdateCartDetailsPayload) =>
       cartService.updateCartDetails(payload),
@@ -101,8 +120,12 @@ export const useUpdateCartDetails = () => {
       queryClient.setQueryData(CART_QUERY_KEY, data.data);
     },
     onError: (error) => {
-      toast.error(getErrorMessage(error, "Failed to save notes."));
-      queryClient.invalidateQueries({ queryKey: CART_QUERY_KEY });
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        router.push("/login?redirect=/cart");
+      } else {
+        toast.error(getErrorMessage(error, "Failed to save notes."));
+        queryClient.invalidateQueries({ queryKey: CART_QUERY_KEY });
+      }
     },
   });
 };
@@ -112,6 +135,7 @@ export const useUpdateCartDetails = () => {
  */
 export const useSubmitQuote = () => {
   const queryClient = useQueryClient();
+  const router = useRouter();
   const { closeCart, setCart } = useCartStore();
 
   return useMutation({
@@ -134,7 +158,11 @@ export const useSubmitQuote = () => {
       closeCart();
     },
     onError: (error) => {
-      toast.error(getErrorMessage(error, "Failed to submit quote request."));
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        router.push("/login?redirect=/cart");
+      } else {
+        toast.error(getErrorMessage(error, "Failed to submit quote request."));
+      }
     },
   });
 };
