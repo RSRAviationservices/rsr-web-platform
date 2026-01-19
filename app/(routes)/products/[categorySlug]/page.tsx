@@ -15,11 +15,11 @@ export async function generateStaticParams() {
 }
 
 interface CategoryPageProps {
-  params: { categorySlug: string };
+  params: Promise<{ categorySlug: string }>;
 }
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
-  const { categorySlug } = params;
+  const { categorySlug } = await params;
 
   const [category, initialProducts] = await Promise.all([
     getCategoryBySlug(categorySlug),
