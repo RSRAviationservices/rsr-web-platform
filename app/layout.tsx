@@ -4,6 +4,7 @@ import { Geist } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { Toaster } from "./components/ui/sonner";
+import AnalyticsTracker from "./components/common/AnalyticsTracker";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,7 +24,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} antialiased bg-white`}>
-        <Providers>{children}</Providers>
+        <Providers>
+          <AnalyticsTracker />
+          {children}
+        </Providers>
         <Toaster richColors/>
       </body>
     </html>

@@ -3,7 +3,6 @@ import { toast } from "sonner";
 import * as quoteService from "./quoteService";
 import { useCartStore } from "@/app/store/useCartStore";
 import { Cart } from "../cart/types";
-import { getErrorMessage } from "@/app/lib/utils";
 
 const CART_QUERY_KEY = ["cart"];
 const QUOTES_QUERY_KEY = ["myQuotes"];
@@ -14,9 +13,9 @@ export const useSubmitQuote = () => {
 
   return useMutation({
     mutationFn: () => quoteService.submitQuote(),
-    onSuccess: (data) => {
+    onSuccess: (response) => {
       toast.success("Quote request submitted!", {
-        description: `Your quote number is ${data.data?.quoteNumber}. We will get back to you shortly.`,
+        description: `Your quote number is ${response.data?.quoteNumber}. We will get back to you shortly.`,
       });
       const emptyCart: Cart = { id: "", items: [], specialInstructions: "", user: "", createdAt: "", updatedAt: "" };
       queryClient.setQueryData(CART_QUERY_KEY, emptyCart);
@@ -24,18 +23,18 @@ export const useSubmitQuote = () => {
       queryClient.invalidateQueries({ queryKey: QUOTES_QUERY_KEY });
       closeCart();
     },
-    onError: (error) => {
-      toast.error(getErrorMessage(error, "Failed to submit quote request."));
+    onError: (error: Error) => {
+      toast.error(error.message);
     },
   });
 };
 
-export const useMyQuotes = () => {
+export const useMyQuotes = (params?: { page?: number; limit?: number }) => {
   return useQuery({
-    queryKey: QUOTES_QUERY_KEY,
+    queryKey: [QUOTES_QUERY_KEY, params],
     queryFn: async () => {
-      const response = await quoteService.getMyQuotes();
-      return response.data;
+      const response = await quoteService.getMyQuotes(params);
+      return response;
     },
     enabled: false, // We will trigger this manually
   });
