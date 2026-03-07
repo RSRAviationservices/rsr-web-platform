@@ -12,14 +12,6 @@ import {
   UpdateUserProfilePayload,
 } from "./types";
 
-const getErrorMessage = (error: any, defaultMessage: string): string => {
-  const errorObj = error.response?.data?.error;
-  if (typeof errorObj?.message === "object" && errorObj.message !== null) {
-    return errorObj.message.message || defaultMessage;
-  }
-  return errorObj?.message || defaultMessage;
-};
-
 export const useCurrentUser = () => {
   return useQuery({
     queryKey: ["currentUser"],
@@ -38,12 +30,8 @@ export const useSignup = () => {
       });
       router.push("/verify-email");
     },
-    onError: (error: any) => {
-      const message = getErrorMessage(
-        error,
-        "Signup failed. Please try again."
-      );
-      toast.error(message);
+    onError: (error: Error) => {
+      toast.error(error.message);
     },
   });
 };
@@ -58,14 +46,13 @@ export const useLogin = () => {
       queryClient.invalidateQueries({ queryKey: ["currentUser"] });
       router.push("/");
     },
-    onError: (error: any) => {
-      const message = getErrorMessage(error, "Invalid email or password.");
-      toast.error(message);
+    onError: (error: Error) => {
+      toast.error(error.message);
     },
   });
 };
 
-// ... (useForgotPassword and useResetPassword hooks updated similarly)
+// Hook for handling forgot password
 export const useForgotPassword = () => {
   return useMutation({
     mutationFn: (data: ForgotPasswordPayload) =>
@@ -77,13 +64,13 @@ export const useForgotPassword = () => {
           "If an account exists, you will receive an email.",
       });
     },
-    onError: (error: any) => {
-      const message = getErrorMessage(error, "An error occurred.");
-      toast.error(message);
+    onError: (error: Error) => {
+      toast.error(error.message);
     },
   });
 };
 
+// Hook for handling reset password
 export const useResetPassword = () => {
   const router = useRouter();
   return useMutation({
@@ -94,14 +81,13 @@ export const useResetPassword = () => {
       );
       router.push("/login");
     },
-    onError: (error: any) => {
-      const message = getErrorMessage(error, "Invalid or expired token.");
-      toast.error(message);
+    onError: (error: Error) => {
+      toast.error(error.message);
     },
   });
 };
 
-// New hook for handling email verification
+// Hook for handling email verification
 export const useVerifyEmail = () => {
   return useMutation({
     mutationFn: (token: string) => authService.verifyEmail(token),
@@ -110,12 +96,8 @@ export const useVerifyEmail = () => {
         description: "You can now log in with your credentials.",
       });
     },
-    onError: (error: any) => {
-      const message = getErrorMessage(
-        error,
-        "Verification failed. The link may be invalid or expired."
-      );
-      toast.error(message);
+    onError: (error: Error) => {
+      toast.error(error.message);
     },
   });
 };
@@ -133,27 +115,23 @@ export const useLogout = () => {
       queryClient.invalidateQueries();
       router.push("/login");
     },
-    onError: () => {
-      toast.error("Logout failed. Please try again.");
+    onError: (error: Error) => {
+      toast.error(error.message);
     },
   });
 };
 
-// New hook for resending the verification email
+// Hook for resending the verification email
 export const useResendVerificationEmail = () => {
   return useMutation({
     mutationFn: () => authService.resendVerificationEmail(),
-    onSuccess: (data) => {
+    onSuccess: (response) => {
       toast.success("Verification email sent!", {
-        description: data.data?.message || "Please check your inbox.",
+        description: response.data?.message || "Please check your inbox.",
       });
     },
-    onError: (error: any) => {
-      const message = getErrorMessage(
-        error,
-        "Failed to send email. Please try again later."
-      );
-      toast.error(message);
+    onError: (error: Error) => {
+      toast.error(error.message);
     },
   });
 };
@@ -170,9 +148,8 @@ export const useUpdateUserProfile = () => {
       toast.success("Profile updated successfully!");
       queryClient.invalidateQueries({ queryKey: ["currentUser"] });
     },
-    onError: (error: any) => {
-      const message = getErrorMessage(error, "Failed to update profile.");
-      toast.error(message);
+    onError: (error: Error) => {
+      toast.error(error.message);
     },
   });
 };

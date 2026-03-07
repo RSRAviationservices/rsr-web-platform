@@ -1,6 +1,4 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import axios from "axios";
 import { toast } from "sonner";
 import * as cartService from "./cartService";
 import { useCartStore } from "@/app/store/useCartStore";
@@ -10,7 +8,6 @@ import {
   UpdateCartDetailsPayload,
   UpdateItemQuantityPayload,
 } from "./types";
-import { getErrorMessage } from "@/app/lib/utils";
 import { useEffect } from "react";
 const CART_QUERY_KEY = ["cart"];
 const QUOTES_QUERY_KEY = ["myQuotes"];
@@ -43,20 +40,15 @@ export const useCart = () => {
  */
 export const useAddItem = () => {
   const queryClient = useQueryClient();
-  const router = useRouter();
 
   return useMutation({
     mutationFn: (payload: AddItemPayload) => cartService.addItem(payload),
-    onSuccess: (data) => {
+    onSuccess: (response) => {
       toast.success("Item added to cart.");
-      queryClient.setQueryData(CART_QUERY_KEY, data.data);
+      queryClient.setQueryData(CART_QUERY_KEY, response.data);
     },
-    onError: (error) => {
-      if (axios.isAxiosError(error) && error.response?.status === 401) {
-        router.push("/login?redirect=/cart"); // Optionally add redirect param if supported
-      } else {
-        toast.error(getErrorMessage(error, "Failed to add item."));
-      }
+    onError: (error: Error) => {
+      toast.error(error.message);
     },
   });
 };
@@ -66,20 +58,15 @@ export const useAddItem = () => {
  */
 export const useUpdateItemQuantity = () => {
   const queryClient = useQueryClient();
-  const router = useRouter();
   return useMutation({
     mutationFn: (payload: UpdateItemQuantityPayload) =>
       cartService.updateItemQuantity(payload),
-    onSuccess: (data) => {
-      queryClient.setQueryData(CART_QUERY_KEY, data.data);
+    onSuccess: (response) => {
+      queryClient.setQueryData(CART_QUERY_KEY, response.data);
     },
-    onError: (error) => {
-      if (axios.isAxiosError(error) && error.response?.status === 401) {
-        router.push("/login?redirect=/cart");
-      } else {
-        toast.error(getErrorMessage(error, "Failed to update quantity."));
-        queryClient.invalidateQueries({ queryKey: CART_QUERY_KEY }); // Revert on error
-      }
+    onError: (error: Error) => {
+      toast.error(error.message);
+      queryClient.invalidateQueries({ queryKey: CART_QUERY_KEY });
     },
   });
 };
@@ -89,20 +76,15 @@ export const useUpdateItemQuantity = () => {
  */
 export const useRemoveItem = () => {
   const queryClient = useQueryClient();
-  const router = useRouter();
   return useMutation({
     mutationFn: (productId: string) => cartService.removeItem(productId),
-    onSuccess: (data) => {
+    onSuccess: (response) => {
       toast.info("Item removed from cart.");
-      queryClient.setQueryData(CART_QUERY_KEY, data.data);
+      queryClient.setQueryData(CART_QUERY_KEY, response.data);
     },
-    onError: (error) => {
-      if (axios.isAxiosError(error) && error.response?.status === 401) {
-        router.push("/login?redirect=/cart");
-      } else {
-        toast.error(getErrorMessage(error, "Failed to remove item."));
-        queryClient.invalidateQueries({ queryKey: CART_QUERY_KEY });
-      }
+    onError: (error: Error) => {
+      toast.error(error.message);
+      queryClient.invalidateQueries({ queryKey: CART_QUERY_KEY });
     },
   });
 };
@@ -112,20 +94,15 @@ export const useRemoveItem = () => {
  */
 export const useUpdateCartDetails = () => {
   const queryClient = useQueryClient();
-  const router = useRouter();
   return useMutation({
     mutationFn: (payload: UpdateCartDetailsPayload) =>
       cartService.updateCartDetails(payload),
-    onSuccess: (data) => {
-      queryClient.setQueryData(CART_QUERY_KEY, data.data);
+    onSuccess: (response) => {
+      queryClient.setQueryData(CART_QUERY_KEY, response.data);
     },
-    onError: (error) => {
-      if (axios.isAxiosError(error) && error.response?.status === 401) {
-        router.push("/login?redirect=/cart");
-      } else {
-        toast.error(getErrorMessage(error, "Failed to save notes."));
-        queryClient.invalidateQueries({ queryKey: CART_QUERY_KEY });
-      }
+    onError: (error: Error) => {
+      toast.error(error.message);
+      queryClient.invalidateQueries({ queryKey: CART_QUERY_KEY });
     },
   });
 };
@@ -135,14 +112,13 @@ export const useUpdateCartDetails = () => {
  */
 export const useSubmitQuote = () => {
   const queryClient = useQueryClient();
-  const router = useRouter();
   const { closeCart, setCart } = useCartStore();
 
   return useMutation({
     mutationFn: () => cartService.submitQuote(),
-    onSuccess: (data) => {
+    onSuccess: (response) => {
       toast.success("Quote request submitted!", {
-        description: `Your quote number is ${data.data?.quoteNumber}. We will get back to you shortly.`,
+        description: `Your quote number is ${response.data?.quoteNumber}. We will get back to you shortly.`,
       });
       const emptyCart: Cart = {
         id: "",
@@ -157,12 +133,8 @@ export const useSubmitQuote = () => {
       queryClient.invalidateQueries({ queryKey: QUOTES_QUERY_KEY });
       closeCart();
     },
-    onError: (error) => {
-      if (axios.isAxiosError(error) && error.response?.status === 401) {
-        router.push("/login?redirect=/cart");
-      } else {
-        toast.error(getErrorMessage(error, "Failed to submit quote request."));
-      }
+    onError: (error: Error) => {
+      toast.error(error.message);
     },
   });
 };
