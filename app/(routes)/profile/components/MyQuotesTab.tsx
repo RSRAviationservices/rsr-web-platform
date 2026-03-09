@@ -36,7 +36,7 @@ export default function MyQuotesTab() {
 
   // 1. Fetch live data using the useMyQuotes hook
   const { data: quotesData, isLoading, isError, refetch } = useMyQuotes();
-  const quotes = quotesData || [];
+  const quotes = quotesData?.data || [];
 
   // 2. Trigger the fetch on component mount
   useEffect(() => {
