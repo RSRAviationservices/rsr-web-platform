@@ -16,8 +16,7 @@ import {
  * GET /cart
  */
 export const getCart = async (): Promise<ApiResponse<Cart>> => {
-  const response = await axiosClient.get<ApiResponse<Cart>>("/cart");
-  return response.data;
+  return axiosClient.get<ApiResponse<Cart>>("/cart");
 };
 
 /**
@@ -27,11 +26,7 @@ export const getCart = async (): Promise<ApiResponse<Cart>> => {
 export const addItem = async (
   payload: AddItemPayload
 ): Promise<ApiResponse<Cart>> => {
-  const response = await axiosClient.post<ApiResponse<Cart>>(
-    "/cart/items",
-    payload
-  );
-  return response.data;
+  return axiosClient.post<ApiResponse<Cart>>("/cart/items", payload);
 };
 
 /**
@@ -42,11 +37,9 @@ export const updateItemQuantity = async ({
   productId,
   quantity,
 }: UpdateItemQuantityPayload): Promise<ApiResponse<Cart>> => {
-  const response = await axiosClient.patch<ApiResponse<Cart>>(
-    `/cart/items/${productId}`,
-    { quantity }
-  );
-  return response.data;
+  return axiosClient.patch<ApiResponse<Cart>>(`/cart/items/${productId}`, {
+    quantity,
+  });
 };
 
 /**
@@ -56,10 +49,7 @@ export const updateItemQuantity = async ({
 export const removeItem = async (
   productId: string
 ): Promise<ApiResponse<Cart>> => {
-  const response = await axiosClient.delete<ApiResponse<Cart>>(
-    `/cart/items/${productId}`
-  );
-  return response.data;
+  return axiosClient.delete<ApiResponse<Cart>>(`/cart/items/${productId}`);
 };
 
 /**
@@ -69,8 +59,7 @@ export const removeItem = async (
 export const updateCartDetails = async (
   payload: UpdateCartDetailsPayload
 ): Promise<ApiResponse<Cart>> => {
-  const response = await axiosClient.patch<ApiResponse<Cart>>("/cart", payload);
-  return response.data;
+  return axiosClient.patch<ApiResponse<Cart>>("/cart", payload);
 };
 
 /**
@@ -78,8 +67,7 @@ export const updateCartDetails = async (
  * DELETE /cart
  */
 export const clearCart = async (): Promise<ApiResponse<Cart>> => {
-  const response = await axiosClient.delete<ApiResponse<Cart>>("/cart");
-  return response.data;
+  return axiosClient.delete<ApiResponse<Cart>>("/cart");
 };
 
 // =================================
@@ -91,8 +79,7 @@ export const clearCart = async (): Promise<ApiResponse<Cart>> => {
  * POST /quotes
  */
 export const submitQuote = async (): Promise<ApiResponse<QuoteRequest>> => {
-  const response = await axiosClient.post<ApiResponse<QuoteRequest>>("/quotes");
-  return response.data;
+  return axiosClient.post<ApiResponse<QuoteRequest>>("/quotes");
 };
 
 /**
@@ -100,8 +87,5 @@ export const submitQuote = async (): Promise<ApiResponse<QuoteRequest>> => {
  * GET /quotes
  */
 export const getMyQuotes = async (): Promise<ApiResponse<QuoteRequest[]>> => {
-  const response = await axiosClient.get<ApiResponse<QuoteRequest[]>>(
-    "/quotes"
-  );
-  return response.data;
+  return axiosClient.get<ApiResponse<QuoteRequest[]>>("/quotes");
 };

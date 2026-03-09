@@ -8,7 +8,6 @@ import {
   UpdateCartDetailsPayload,
   UpdateItemQuantityPayload,
 } from "./types";
-import { getErrorMessage } from "@/app/lib/utils";
 import { useEffect } from "react";
 const CART_QUERY_KEY = ["cart"];
 const QUOTES_QUERY_KEY = ["myQuotes"];
@@ -41,14 +40,19 @@ export const useCart = () => {
  */
 export const useAddItem = () => {
   const queryClient = useQueryClient();
+  const { setCart } = useCartStore();
+
   return useMutation({
     mutationFn: (payload: AddItemPayload) => cartService.addItem(payload),
-    onSuccess: (data) => {
+    onSuccess: (response) => {
       toast.success("Item added to cart.");
-      queryClient.setQueryData(CART_QUERY_KEY, data.data);
+      if (response.data) {
+        setCart(response.data);
+        queryClient.setQueryData(CART_QUERY_KEY, response.data);
+      }
     },
-    onError: (error) => {
-      toast.error(getErrorMessage(error, "Failed to add item."));
+    onError: (error: Error) => {
+      toast.error(error.message);
     },
   });
 };
@@ -58,15 +62,20 @@ export const useAddItem = () => {
  */
 export const useUpdateItemQuantity = () => {
   const queryClient = useQueryClient();
+  const { setCart } = useCartStore();
+
   return useMutation({
     mutationFn: (payload: UpdateItemQuantityPayload) =>
       cartService.updateItemQuantity(payload),
-    onSuccess: (data) => {
-      queryClient.setQueryData(CART_QUERY_KEY, data.data);
+    onSuccess: (response) => {
+      if (response.data) {
+        setCart(response.data);
+        queryClient.setQueryData(CART_QUERY_KEY, response.data);
+      }
     },
-    onError: (error) => {
-      toast.error(getErrorMessage(error, "Failed to update quantity."));
-      queryClient.invalidateQueries({ queryKey: CART_QUERY_KEY }); // Revert on error
+    onError: (error: Error) => {
+      toast.error(error.message);
+      queryClient.invalidateQueries({ queryKey: CART_QUERY_KEY });
     },
   });
 };
@@ -76,14 +85,19 @@ export const useUpdateItemQuantity = () => {
  */
 export const useRemoveItem = () => {
   const queryClient = useQueryClient();
+  const { setCart } = useCartStore();
+
   return useMutation({
     mutationFn: (productId: string) => cartService.removeItem(productId),
-    onSuccess: (data) => {
+    onSuccess: (response) => {
       toast.info("Item removed from cart.");
-      queryClient.setQueryData(CART_QUERY_KEY, data.data);
+      if (response.data) {
+        setCart(response.data);
+        queryClient.setQueryData(CART_QUERY_KEY, response.data);
+      }
     },
-    onError: (error) => {
-      toast.error(getErrorMessage(error, "Failed to remove item."));
+    onError: (error: Error) => {
+      toast.error(error.message);
       queryClient.invalidateQueries({ queryKey: CART_QUERY_KEY });
     },
   });
@@ -94,60 +108,71 @@ export const useRemoveItem = () => {
  */
 export const useUpdateCartDetails = () => {
   const queryClient = useQueryClient();
+  const { setCart } = useCartStore();
+
   return useMutation({
     mutationFn: (payload: UpdateCartDetailsPayload) =>
       cartService.updateCartDetails(payload),
-    onSuccess: (data) => {
-      queryClient.setQueryData(CART_QUERY_KEY, data.data);
+    onSuccess: (response) => {
+      if (response.data) {
+        setCart(response.data);
+        queryClient.setQueryData(CART_QUERY_KEY, response.data);
+      }
     },
-    onError: (error) => {
-      toast.error(getErrorMessage(error, "Failed to save notes."));
+    onError: (error: Error) => {
+      toast.error(error.message);
       queryClient.invalidateQueries({ queryKey: CART_QUERY_KEY });
     },
   });
 };
 
 /**
- * Hook to submit the cart for a quote.
+ * Hook to submit the current cart as a quote request.
  */
 export const useSubmitQuote = () => {
   const queryClient = useQueryClient();
-  const { closeCart, setCart } = useCartStore();
+  const { setCart, closeCart } = useCartStore();
 
   return useMutation({
     mutationFn: () => cartService.submitQuote(),
-    onSuccess: (data) => {
-      toast.success("Quote request submitted!", {
-        description: `Your quote number is ${data.data?.quoteNumber}. We will get back to you shortly.`,
+    onSuccess: (response) => {
+      const quoteNumber = response.data?.quoteNumber;
+      toast.success("Quote request submitted successfully!", {
+        description: quoteNumber ? `Your quote number is ${quoteNumber}` : "Our team will contact you soon.",
       });
-      const emptyCart: Cart = {
-        id: "",
+      // The backend clears the cart upon successful quote creation.
+      // We also update our local state to reflect that.
+      setCart({ items: [], specialInstructions: "" });
+      queryClient.setQueryData(CART_QUERY_KEY, {
         items: [],
         specialInstructions: "",
-        user: "",
-        createdAt: "",
-        updatedAt: "",
-      };
-      queryClient.setQueryData(CART_QUERY_KEY, emptyCart);
-      setCart(emptyCart);
+      });
       queryClient.invalidateQueries({ queryKey: QUOTES_QUERY_KEY });
       closeCart();
     },
-    onError: (error) => {
-      toast.error(getErrorMessage(error, "Failed to submit quote request."));
+    onError: (error: Error) => {
+      toast.error(error.message);
     },
   });
 };
+
 /**
- * Hook to fetch the user's quote requests.
+ * Hook to clear all items from the cart.
  */
-export const useMyQuotes = () => {
-  return useQuery({
-    queryKey: QUOTES_QUERY_KEY,
-    queryFn: async () => {
-      const response = await cartService.getMyQuotes();
-      return response.data;
+export const useClearCart = () => {
+  const queryClient = useQueryClient();
+  const { setCart } = useCartStore();
+
+  return useMutation({
+    mutationFn: () => cartService.clearCart(),
+    onSuccess: (response) => {
+      toast.info("Cart has been cleared.");
+      setCart(response.data!);
+      queryClient.setQueryData(CART_QUERY_KEY, response.data);
     },
-    enabled: false,
+    onError: (error: Error) => {
+      toast.error(error.message);
+      queryClient.invalidateQueries({ queryKey: CART_QUERY_KEY });
+    },
   });
 };

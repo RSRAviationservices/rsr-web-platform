@@ -17,11 +17,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export const signup = async (
   data: SignupPayload
 ): Promise<ApiResponse<User>> => {
-  const response = await axiosClient.post<ApiResponse<User>>(
-    "/auth/user/register",
-    data
-  );
-  return response.data;
+  return axiosClient.post<ApiResponse<User>>("/auth/user/register", data);
 };
 
 /**
@@ -29,11 +25,7 @@ export const signup = async (
  * POST /auth/user/login
  */
 export const login = async (data: LoginPayload): Promise<ApiResponse<User>> => {
-  const response = await axiosClient.post<ApiResponse<User>>(
-    "/auth/user/login",
-    data
-  );
-  return response.data;
+  return axiosClient.post<ApiResponse<User>>("/auth/user/login", data);
 };
 
 /**
@@ -51,11 +43,10 @@ export const initiateGoogleLogin = (): void => {
 export const forgotPassword = async (
   data: ForgotPasswordPayload
 ): Promise<ApiResponse<{ message: string }>> => {
-  const response = await axiosClient.post<ApiResponse<{ message: string }>>(
+  return axiosClient.post<ApiResponse<{ message: string }>>(
     "/auth/user/forgot-password",
     data
   );
-  return response.data;
 };
 
 /**
@@ -65,11 +56,10 @@ export const forgotPassword = async (
 export const resetPassword = async (
   data: ResetPasswordPayload
 ): Promise<ApiResponse<{ message: string }>> => {
-  const response = await axiosClient.post<ApiResponse<{ message: string }>>(
+  return axiosClient.post<ApiResponse<{ message: string }>>(
     "/auth/user/reset-password",
     data
   );
-  return response.data;
 };
 
 /**
@@ -77,8 +67,7 @@ export const resetPassword = async (
  * NOTE: This assumes you will add a GET /auth/user/me endpoint protected by the SessionGuard.
  */
 export const getCurrentUser = async (): Promise<ApiResponse<User>> => {
-  const response = await axiosClient.get<ApiResponse<User>>("/auth/user/me");
-  return response.data;
+  return axiosClient.get<ApiResponse<User>>("/auth/user/me");
 };
 
 /**
@@ -88,11 +77,10 @@ export const getCurrentUser = async (): Promise<ApiResponse<User>> => {
 export const verifyEmail = async (
   token: string
 ): Promise<ApiResponse<{ message: string }>> => {
-  const response = await axiosClient.post<ApiResponse<{ message: string }>>(
+  return axiosClient.post<ApiResponse<{ message: string }>>(
     "/auth/user/verify-email",
     { token }
   );
-  return response.data;
 };
 
 /**
@@ -101,10 +89,7 @@ export const verifyEmail = async (
  */
 export const logout = async (): Promise<ApiResponse<{ message: string }>> => {
   // This endpoint should invalidate the session cookie on the backend.
-  const response = await axiosClient.post<ApiResponse<{ message: string }>>(
-    "/auth/user/logout"
-  );
-  return response.data;
+  return axiosClient.post<ApiResponse<{ message: string }>>("/auth/user/logout");
 };
 
 /**
@@ -114,10 +99,9 @@ export const logout = async (): Promise<ApiResponse<{ message: string }>> => {
 export const resendVerificationEmail = async (): Promise<
   ApiResponse<{ message: string }>
 > => {
-  const response = await axiosClient.post<ApiResponse<{ message: string }>>(
+  return axiosClient.post<ApiResponse<{ message: string }>>(
     "/auth/user/resend-verification"
   );
-  return response.data;
 };
 
 /**
@@ -127,9 +111,5 @@ export const resendVerificationEmail = async (): Promise<
 export const updateUserProfile = async (
   data: UpdateUserProfilePayload
 ): Promise<ApiResponse<User>> => {
-  const response = await axiosClient.patch<ApiResponse<User>>(
-    "/auth/user/me",
-    data
-  );
-  return response.data;
+  return axiosClient.patch<ApiResponse<User>>("/auth/user/me", data);
 };

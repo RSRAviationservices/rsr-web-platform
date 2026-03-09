@@ -13,10 +13,21 @@ import {
 import { Button } from "@/app/components/ui/button";
 import { Textarea } from "@/app/components/ui/textarea";
 import { ScrollArea } from "@/app/components/ui/scroll-area";
-import { FileSpreadsheet, Loader2 } from "lucide-react";
+import { FileSpreadsheet, Loader2, Trash2 } from "lucide-react";
 import CartItemCard from "./CartItemCard";
-import { useSubmitQuote, useUpdateCartDetails } from "@/app/api/cart/cartHooks";
+import { useSubmitQuote, useUpdateCartDetails, useClearCart } from "@/app/api/cart/cartHooks";
 import { useDebouncedCallback } from "use-debounce";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/app/components/ui/alert-dialog";
 
 export default function CartSheet() {
   const isOpen = useCartStore((state) => state.isOpen);
@@ -26,6 +37,7 @@ export default function CartSheet() {
 
   const { mutate: submitQuote, isPending: isSubmitting } = useSubmitQuote();
   const { mutate: updateDetails } = useUpdateCartDetails();
+  const { mutate: clearCart, isPending: isClearing } = useClearCart();
 
   const [notes, setNotes] = useState(specialInstructions);
 
@@ -46,11 +58,47 @@ export default function CartSheet() {
     submitQuote();
   };
 
+  const handleClearCart = () => {
+    clearCart();
+  };
+
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
       <SheetContent className="z-100 flex w-full flex-col sm:max-w-lg">
-        <SheetHeader className="px-6 pt-6">
+        <SheetHeader className="px-6 pt-6 flex flex-row items-center justify-between space-y-0">
           <SheetTitle>Request for Quotation ({items.length})</SheetTitle>
+          {items.length > 0 && (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="text-zinc-500 hover:text-red-600 hover:bg-red-50 gap-2"
+                  disabled={isClearing || isSubmitting}
+                >
+                  <Trash2 size={16} />
+                  Clear
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Clear your quote cart?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will remove all items from your current quote request. This action cannot be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction 
+                    onClick={handleClearCart}
+                    className="bg-red-600 hover:bg-red-700 focus:ring-red-600"
+                  >
+                    Clear Cart
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          )}
         </SheetHeader>
 
         {items.length > 0 ? (
@@ -87,14 +135,15 @@ export default function CartSheet() {
             <SheetFooter className="p-6 bg-stone-50 border-t">
               <Button
                 onClick={handleSubmit}
-                disabled={isSubmitting}
+                disabled={isSubmitting || isClearing}
                 size="lg"
                 className="w-full"
               >
-                {isSubmitting && (
+                {isSubmitting ? (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  "Submit for Quotation"
                 )}
-                Submit for Quotation
               </Button>
             </SheetFooter>
           </>
