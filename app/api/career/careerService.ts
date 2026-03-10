@@ -13,20 +13,23 @@ export const careerService = {
    * Get all published careers (Public)
    */
   async getCareers(params?: GetCareersQuery): Promise<PaginatedCareers> {
+    // If we want PaginatedCareers, and it's already unwrapped by axiosClient,
+    // we should just return it.
     const response = await axiosClient.get<PaginatedCareers>(BASE_URL, {
       params,
     });
-    return response.data;
+    return response;
   },
 
   /**
    * Get career by slug (Public)
    */
   async getCareerBySlug(slug: string): Promise<Career> {
-    const response = await axiosClient.get<{ data: Career }>(
+    // The interceptor already returns response.data (which is ApiResponse<Career>)
+    const response = await axiosClient.get<ApiResponse<Career>>(
       `${BASE_URL}/${slug}`
     );
-    return response.data.data;
+    return response.data as Career;
   },
 
   /**
@@ -36,10 +39,9 @@ export const careerService = {
     slug: string,
     data: SubmitApplicationData
   ): Promise<ApiResponse<any>> {
-    const response = await axiosClient.post<ApiResponse<any>>(
+    return axiosClient.post<ApiResponse<any>>(
       `${BASE_URL}/${slug}/apply`,
       data
     );
-    return response.data;
   },
 };

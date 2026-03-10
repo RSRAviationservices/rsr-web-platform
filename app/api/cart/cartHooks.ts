@@ -131,7 +131,7 @@ export const useUpdateCartDetails = () => {
  */
 export const useSubmitQuote = () => {
   const queryClient = useQueryClient();
-  const { setCart, closeCart } = useCartStore();
+  const { closeCart } = useCartStore();
 
   return useMutation({
     mutationFn: () => cartService.submitQuote(),
@@ -141,12 +141,8 @@ export const useSubmitQuote = () => {
         description: quoteNumber ? `Your quote number is ${quoteNumber}` : "Our team will contact you soon.",
       });
       // The backend clears the cart upon successful quote creation.
-      // We also update our local state to reflect that.
-      setCart({ items: [], specialInstructions: "" });
-      queryClient.setQueryData(CART_QUERY_KEY, {
-        items: [],
-        specialInstructions: "",
-      });
+      // We invalidate to refresh the cart state.
+      queryClient.invalidateQueries({ queryKey: CART_QUERY_KEY });
       queryClient.invalidateQueries({ queryKey: QUOTES_QUERY_KEY });
       closeCart();
     },
@@ -167,8 +163,10 @@ export const useClearCart = () => {
     mutationFn: () => cartService.clearCart(),
     onSuccess: (response) => {
       toast.info("Cart has been cleared.");
-      setCart(response.data!);
-      queryClient.setQueryData(CART_QUERY_KEY, response.data);
+      if (response.data) {
+        setCart(response.data);
+        queryClient.setQueryData(CART_QUERY_KEY, response.data);
+      }
     },
     onError: (error: Error) => {
       toast.error(error.message);

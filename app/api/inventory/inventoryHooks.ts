@@ -33,13 +33,13 @@ const fetchProducts = async ({
     params.append("subcategories", filters.subcategories.join(","));
   }
 
-  const { data: response } = await axiosClient.get<ApiResponse<Product[]>>(
+  const response = await axiosClient.get<ApiResponse<Product[]>>(
     `/products?${params.toString()}`
   );
 
   return {
     data: response.data || [],
-    meta: response.meta || { total: 0, page: 1, limit: 12, totalPages: 0 },
+    meta: (response.meta as any) || { total: 0, page: 1, limit: 12, totalPages: 0 },
   };
 };
 
@@ -82,12 +82,12 @@ const searchProducts = async (query: string): Promise<PaginatedProducts> => {
   if (!query || query.length < 3) {
     return { data: [], meta: { total: 0, page: 1, limit: 5, totalPages: 0 } };
   }
-  const { data: response } = await axiosClient.get<ApiResponse<Product[]>>(
+  const response = await axiosClient.get<ApiResponse<Product[]>>(
     `/products/search?q=${query}&limit=5`
   );
   return {
     data: response.data || [],
-    meta: response.meta || { total: 0, page: 1, limit: 5, totalPages: 0 },
+    meta: (response.meta as any) || { total: 0, page: 1, limit: 5, totalPages: 0 },
   };
 };
 

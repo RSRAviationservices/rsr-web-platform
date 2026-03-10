@@ -1,13 +1,22 @@
 // app/api/axiosClient.ts
-import axios from "axios";
+import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import Cookies from "js-cookie";
 
-const axiosClient = axios.create({
+// Define a custom interface to reflect the unwrapped response from the interceptor
+export interface UnwrappedAxiosInstance extends Omit<AxiosInstance, 'get' | 'post' | 'patch' | 'put' | 'delete'> {
+  get<T = any, R = T, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
+  post<T = any, R = T, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
+  patch<T = any, R = T, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
+  put<T = any, R = T, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
+  delete<T = any, R = T, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
+}
+
+const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   withCredentials: true,
 });
 
-axiosClient.interceptors.request.use((config) => {
+instance.interceptors.request.use((config) => {
   const csrfToken = Cookies.get("csrf_token");
   if (csrfToken) {
     config.headers["x-csrf-token"] = csrfToken;
@@ -15,7 +24,7 @@ axiosClient.interceptors.request.use((config) => {
   return config;
 });
 
-axiosClient.interceptors.response.use(
+instance.interceptors.response.use(
   (response) => {
     // Return only the inner data object if it exists and success is true
     if (response.data && response.data.success) {
@@ -42,6 +51,8 @@ axiosClient.interceptors.response.use(
     return Promise.reject(new Error(errorMessage));
   }
 );
+
+const axiosClient = instance as unknown as UnwrappedAxiosInstance;
 
 export default axiosClient;
 

@@ -8,9 +8,8 @@ import { ContactFormPayload } from "./types";
 export const submitContactForm = async (
   data: ContactFormPayload
 ): Promise<ApiResponse<{ message: string }>> => {
-  const response = await axiosClient.post<ApiResponse<{ message: string }>>(
+  return axiosClient.post<ApiResponse<{ message: string }>>(
     "/contact",
     data
   );
-  return response.data;
 };
