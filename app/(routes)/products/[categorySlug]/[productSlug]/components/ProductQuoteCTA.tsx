@@ -10,22 +10,39 @@ import {
   useRemoveItem,
   useUpdateItemQuantity,
 } from "@/app/api/cart/cartHooks";
+import { useCurrentUser } from "@/app/api/auth/authHooks";
+import { useRouter, usePathname } from "next/navigation";
+import { toast } from "sonner";
+
 interface ProductQuoteCTAProps {
   product: Product;
 }
 
 export default function ProductQuoteCTA({ product }: ProductQuoteCTAProps) {
   const { items, openCart } = useCartStore();
+  const { data: currentUser } = useCurrentUser();
+  const router = useRouter();
+  const pathname = usePathname();
+
   const { mutate: addItem, isPending: isAdding } = useAddItem();
   const { mutate: updateQuantity, isPending: isUpdating } =
     useUpdateItemQuantity();
   const { mutate: removeItem, isPending: isRemoving } = useRemoveItem();
 
+  const isLoggedIn = !!currentUser?.data;
   const cartItem = items.find((item) => item.product.id === product.id);
   const isInCart = !!cartItem;
   const isMutating = isAdding || isUpdating || isRemoving;
 
   const handleAddToCart = () => {
+    if (!isLoggedIn) {
+      toast.error("Please login to add items to your quote", {
+        description: "You will be redirected to the login page.",
+      });
+      router.push(`/login?redirect=${encodeURIComponent(pathname)}`);
+      return;
+    }
+
     addItem(
       { productId: product.id, quantity: 1 },
       {
