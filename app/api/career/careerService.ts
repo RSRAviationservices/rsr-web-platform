@@ -29,7 +29,8 @@ export const careerService = {
     const response = await axiosClient.get<ApiResponse<Career>>(
       `${BASE_URL}/${slug}`
     );
-    return response.data as Career;
+    // Double cast to resolve potential editor-side type overlap warnings (ts2352)
+    return response.data as unknown as Career;
   },
 
   /**

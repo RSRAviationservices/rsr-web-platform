@@ -64,7 +64,6 @@ export const resetPassword = async (
 
 /**
  * Fetches the currently authenticated user's profile.
- * NOTE: This assumes you will add a GET /auth/user/me endpoint protected by the SessionGuard.
  */
 export const getCurrentUser = async (): Promise<ApiResponse<User>> => {
   return axiosClient.get<ApiResponse<User>>("/auth/user/me");
