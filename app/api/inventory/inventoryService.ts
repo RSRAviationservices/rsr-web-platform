@@ -74,12 +74,16 @@ export const getProductBySlug = async (
   const apiUrl = process.env.API_URL;
   if (!apiUrl) return null;
 
-  const res = await fetch(`${apiUrl}/products/${slug}`, {
-    next: { revalidate: 3600 },
-  });
-  if (!res.ok) return null;
-  const response: ApiResponse<Product> = await res.json();
-  return response.data || null;
+  try {
+    const res = await fetch(`${apiUrl}/products/${slug}`, {
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return null;
+    const response: ApiResponse<Product> = await res.json();
+    return response.data || null;
+  } catch {
+    return null;
+  }
 };
 
 /**
@@ -91,12 +95,16 @@ export const getCategoryBySlug = async (
   const apiUrl = process.env.API_URL;
   if (!apiUrl) return null;
 
-  const res = await fetch(`${apiUrl}/categories/${slug}`, {
-    next: { revalidate: 3600 },
-  });
-  if (!res.ok) return null;
-  const response: ApiResponse<Category> = await res.json();
-  return response.data || null;
+  try {
+    const res = await fetch(`${apiUrl}/categories/${slug}`, {
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return null;
+    const response: ApiResponse<Category> = await res.json();
+    return response.data || null;
+  } catch {
+    return null;
+  }
 };
 
 /**
@@ -108,11 +116,15 @@ export const getAllProductPaths = async (): Promise<
   const apiUrl = process.env.API_URL;
   if (!apiUrl) return [];
 
-  const res = await fetch(`${apiUrl}/products/static-paths`, {
-    next: { revalidate: 3600 },
-  });
-  if (!res.ok) return [];
-  const response: ApiResponse<{ slug: string; categorySlug: string }[]> =
-    await res.json();
-  return response.data || [];
+  try {
+    const res = await fetch(`${apiUrl}/products/static-paths`, {
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return [];
+    const response: ApiResponse<{ slug: string; categorySlug: string }[]> =
+      await res.json();
+    return response.data || [];
+  } catch {
+    return [];
+  }
 };

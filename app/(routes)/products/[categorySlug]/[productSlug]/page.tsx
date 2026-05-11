@@ -12,12 +12,18 @@ import { SpecificationsTable } from "./components/SpecificationsTable";
 import { DetailsAndCompliance } from "./components/DetailsAndCompliance";
 import { QuoteSection } from "./components/QuoteSection";
 
+export const dynamicParams = true;
+
 export async function generateStaticParams() {
-  const paths = await getAllProductPaths();
-  return paths.map((p) => ({
-    categorySlug: p.categorySlug,
-    productSlug: p.slug,
-  }));
+  try {
+    const paths = await getAllProductPaths();
+    return paths.map((p) => ({
+      categorySlug: p.categorySlug,
+      productSlug: p.slug,
+    }));
+  } catch {
+    return [];
+  }
 }
 
 interface ProductDetailsPageProps {

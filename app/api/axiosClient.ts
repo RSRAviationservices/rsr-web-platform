@@ -65,11 +65,13 @@ instance.interceptors.response.use(
       }
     }
 
-    const errorMessage = 
-      error.response?.data?.error?.message || 
-      error.response?.data?.message || 
-      error.message || 
+    const raw =
+      error.response?.data?.error?.message ||
+      error.response?.data?.message ||
+      error.message ||
       "An unexpected error occurred.";
+
+    const errorMessage = typeof raw === "string" ? raw : JSON.stringify(raw);
 
     return Promise.reject(new Error(errorMessage));
   }
