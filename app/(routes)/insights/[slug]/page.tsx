@@ -17,10 +17,16 @@ export const revalidate = 60;
 // Generate static paths for all insights at build time
 export async function generateStaticParams() {
   try {
-    const insightsData = await insightsService.getInsights({ limit: 100 });
-    return insightsData.data.map((insight) => ({
-      slug: insight.slug,
-    }));
+    const slugs: string[] = [];
+    let page = 1;
+    const limit = 50;
+    while (true) {
+      const data = await insightsService.getInsights({ limit, page });
+      data.data.forEach((insight) => slugs.push(insight.slug));
+      if (data.data.length < limit) break;
+      page++;
+    }
+    return slugs.map((slug) => ({ slug }));
   } catch (error) {
     console.error("Error generating static params:", error);
     return [];

@@ -16,10 +16,16 @@ export const revalidate = 60;
 // Generate static paths for all careers at build time
 export async function generateStaticParams() {
   try {
-    const careersData = await careerService.getCareers({ limit: 100 });
-    return careersData.data.map((career) => ({
-      slug: career.slug,
-    }));
+    const slugs: string[] = [];
+    let page = 1;
+    const limit = 50;
+    while (true) {
+      const data = await careerService.getCareers({ limit, page });
+      data.data.forEach((career) => slugs.push(career.slug));
+      if (data.data.length < limit) break;
+      page++;
+    }
+    return slugs.map((slug) => ({ slug }));
   } catch (error) {
     console.error("Error generating static params:", error);
     return [];
