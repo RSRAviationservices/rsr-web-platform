@@ -1,0 +1,11 @@
+User-agent: *
+Disallow: /login
+Disallow: /cart
+Disallow: /checkout
+Disallow: /admin
+Disallow: /search
+
+# Allow everything else
+Allow: /
+
+Sitemap: https://www.rsraviation.com/sitemap.xml
