@@ -125,21 +125,25 @@ export default function LeadershipSection() {
           ))}
         </motion.div>
 
-        <SectionDivider />
+        {vps.length > 0 && (
+          <>
+            <SectionDivider />
 
-        {/* --- Vice Presidents --- */}
-        <SectionHeader title="Vice Presidents" />
-        <motion.div
-          className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          variants={cardsContainerVariants}
-        >
-          {vps.map((member) => (
-            <TeamMemberCard key={member.name} member={member} />
-          ))}
-        </motion.div>
+            {/* --- Vice Presidents --- */}
+            <SectionHeader title="Vice Presidents" />
+            <motion.div
+              className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              variants={cardsContainerVariants}
+            >
+              {vps.map((member) => (
+                <TeamMemberCard key={member.name} member={member} />
+              ))}
+            </motion.div>
+          </>
+        )}
 
         <SectionDivider />
 

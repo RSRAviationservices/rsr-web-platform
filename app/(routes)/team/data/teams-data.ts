@@ -44,30 +44,7 @@ export const directors: TeamMember[] = [
 ];
 
 // Tier 2: VPs
-export const vps: TeamMember[] = [
-  {
-    name: "Pulak Sen",
-    title: "VP - BD & PR",
-    bio: "Veteran aviation journalist with 37+ years in aerospace reporting and strategic advisory.",
-    focus: [
-      "Industry relations & strategic partnerships",
-      "Government policy advocacy",
-      "Brand positioning & stakeholder engagement",
-    ],
-    image: "/images/team/managers/manager7.jpeg",
-  },
-  {
-    name: "Nimish Kadam",
-    title: "VP - SCM & BD",
-    bio: "Supply chain specialist, formerly with Boeing, driving strategic sourcing and business development.",
-    focus: [
-      "Global supply chain optimization",
-      "Vendor qualification & risk management",
-      "Strategic sourcing & procurement excellence",
-    ],
-    image: "/images/team/managers/manager5.jpeg",
-  },
-];
+export const vps: TeamMember[] = [];
 
 // Tier 3: General Managers
 export const generalManagers: TeamMember[] = [
