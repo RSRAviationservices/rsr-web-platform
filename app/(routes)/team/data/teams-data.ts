@@ -59,12 +59,21 @@ export const generalManagers: TeamMember[] = [
     ],
     image: "/images/team/managers/manager2.png",
   },
-  
+  {
+    name: "Naga Srinivas",
+    title: "General Manager -SCM",
+    bio: "12+ years leading supply chain strategy, vendor management, and logistics optimization.",
+    focus: [
+      "Supply chain strategy and optimization",
+      "Vendor management and relationship building",
+      "Logistics planning and execution",
+    ],
+    image: "/images/team/managers/manager3.png",
+  },
 ];
 
 // Tier 4: Business Development Managers & Leads
 export const leadsAndSpecialists: TeamMember[] = [
-  
   {
     name: "Mrunali Dhargave",
     title: "Asst. General Manager, Sales & Defence",
@@ -86,7 +95,7 @@ export const leadsAndSpecialists: TeamMember[] = [
     ],
     image: "/images/team/sales/sales3.png",
   },
-  
+
   {
     name: "Swapnil Mishra",
     title: "Business Development Manager - Aerospace",
@@ -120,11 +129,11 @@ export const leadsAndSpecialists: TeamMember[] = [
     ],
     image: "/images/team/finance/finance.png",
   },
-  
+
   {
     name: "Gaurav Thakkar",
-    title: "SCM",
-    bio: "6+ years leading vendor management, purchase orders, and order lifecycle control.",
+    title: "Business Development",
+    bio: "7+ years leading vendor management, purchase orders, and order lifecycle control.",
     focus: [
       "Manages procurement strategy, supplier performance, and logistics operations",
       "Ensures seamless order fulfilment and material availability across projects",
@@ -132,5 +141,4 @@ export const leadsAndSpecialists: TeamMember[] = [
     ],
     image: "/images/team/purchase/purchase1.png",
   },
-  
 ];
