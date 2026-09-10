@@ -7,7 +7,7 @@ export default function Logo() {
       <div className="relative w-18 h-18 flex items-center justify-center">
         <Image
           src="/images/logo.png"
-          alt="RSR Aviation Logo"
+          alt="RSR Aviation Services Pvt Ltd"
           fill
           className="object-contain"
         />

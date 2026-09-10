@@ -49,7 +49,7 @@ export default function Footer() {
               <div className=" flex flex-row space-x-5">
                 <Image
                   src="/images/logo.png"
-                  alt="RSR Aviation Logo"
+                  alt="RSR Aviation Services Pvt Ltd"
                   width={140}
                   height={32}
                   className="h-8 w-auto"
