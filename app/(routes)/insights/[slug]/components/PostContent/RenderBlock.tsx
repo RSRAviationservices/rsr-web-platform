@@ -130,14 +130,14 @@ export function RenderBlock({ block }: { block: Block }) {
       );
 
     case 'image':
+      // BlockNote image blocks have no inline content; caption/url live in props
       const caption =
-        block.content.length > 0
-          ? (block.content[0] as InlineContent).text
-          : '';
+        block.props?.caption ||
+        (block.content?.length ? (block.content[0] as InlineContent).text : '');
       return (
         <figure className="!my-12 w-full">
           <Image
-            src={block.props?.src || '/placeholder-image.jpg'}
+            src={block.props?.url || block.props?.src || '/placeholder-image.jpg'}
             alt={block.props?.alt || caption || 'Blog post image'}
             width={1200}
             height={800}
@@ -153,7 +153,7 @@ export function RenderBlock({ block }: { block: Block }) {
 
     case 'video':
       const videoType = block.props?.type || 'native';
-      const videoSrc = block.props?.src || '';
+      const videoSrc = block.props?.url || block.props?.src || '';
 
       if (videoType === 'youtube') {
         return (
@@ -183,7 +183,7 @@ export function RenderBlock({ block }: { block: Block }) {
         <audio
           className="!my-8 w-full"
           controls
-          src={block.props?.src || ''}
+          src={block.props?.url || block.props?.src || ''}
         >
           Your browser does not support the audio element.
         </audio>
