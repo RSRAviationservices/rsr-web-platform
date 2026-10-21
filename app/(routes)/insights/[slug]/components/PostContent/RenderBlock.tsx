@@ -134,14 +134,25 @@ export function RenderBlock({ block }: { block: Block }) {
       const caption =
         block.props?.caption ||
         (block.content?.length ? (block.content[0] as InlineContent).text : '');
+      // Respect the width/alignment set in the editor, but never exceed the container
+      const previewWidth = Number(block.props?.previewWidth) || undefined;
+      const imageAlign = {
+        left: 'mr-auto',
+        center: 'mx-auto',
+        right: 'ml-auto',
+      }[block.props?.textAlignment as TextAlignment] || 'mx-auto';
       return (
-        <figure className="!my-12 w-full">
+        <figure
+          className={cn('!my-12 w-full max-w-full', imageAlign)}
+          style={previewWidth ? { maxWidth: previewWidth } : undefined}
+        >
           <Image
             src={block.props?.url || block.props?.src || '/placeholder-image.jpg'}
             alt={block.props?.alt || caption || 'Blog post image'}
             width={1200}
             height={800}
-            className="w-full rounded-lg object-cover"
+            sizes="(max-width: 768px) 100vw, 768px"
+            className="h-auto w-full max-w-full rounded-lg"
           />
           {caption && (
             <figcaption className="mt-3 text-center text-sm text-zinc-500">

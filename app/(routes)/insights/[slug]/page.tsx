@@ -96,12 +96,14 @@ export default async function InsightDetailPage({
 
       {/* Cover Image Section (Full Width) */}
       <div className="container mx-auto max-w-7xl px-4">
-        <div className="relative h-64 w-full overflow-hidden rounded-lg md:h-96 lg:h-[500px]">
+        <div className="w-full overflow-hidden rounded-lg">
           <Image
             src={insight.coverImage}
             alt={insight.title}
-            fill
-            className="object-cover"
+            width={1600}
+            height={900}
+            sizes="(max-width: 1280px) 100vw, 1280px"
+            className="h-auto max-h-[600px] w-full object-cover"
             priority
           />
         </div>
