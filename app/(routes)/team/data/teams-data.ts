@@ -97,17 +97,6 @@ export const leadsAndSpecialists: TeamMember[] = [
   },
 
   {
-    name: "Swapnil Mishra",
-    title: "Business Development Manager - Aerospace",
-    bio: "5+ years supporting customer consultations, product selection, and order coordination.",
-    focus: [
-      "Drives business growth through strategic engagement with aerospace OEMs and MROs",
-      "Identifies new opportunities and manages end-to-end customer acquisition",
-      "Leads proposal strategy, and pricing alignment",
-    ],
-    image: "/images/team/operations/operations1.png",
-  },
-  {
     name: "Puneet Virdi",
     title: "Business Development Manager - Aerospace",
     bio: "Aerospace specialist focused on expanding market presence and building strategic customer relationships With 15+ years of experience in the industry.",
